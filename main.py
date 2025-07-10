@@ -1,6 +1,5 @@
 import pygame
 import menu
-import game
 import fishing
 
 def main():
