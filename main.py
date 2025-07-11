@@ -1,13 +1,20 @@
 import pygame
+import os
+
 import menu
-import game
 import fishing
 
 def main():
     pygame.init()
+    pygame.mixer.init()
     screen = pygame.display.set_mode((1280, 720))
-    pygame.display.set_caption("Симулятор пня")
+    pygame.display.set_caption("Melanfishing")
+    icon = pygame.image.load("resources/logo.png")
+    pygame.display.set_icon(icon)
     isOpen = True
+
+    clock = pygame.time.Clock()
+    speed = 15
 
     #цвета
     RED = (255, 0, 0)
@@ -21,6 +28,8 @@ def main():
     state = "menu"
 
     while isOpen: 
+        pygame.time.Clock().tick(60)
+
         mouse_pos = pygame.mouse.get_pos()
 
         for event in pygame.event.get():
