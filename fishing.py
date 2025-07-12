@@ -56,6 +56,7 @@ class Fishing:
         self.katushka = pygame.mixer.Sound("resources/katushka.mp3")
         self.katushka.set_volume(0.1)
         self.rain = pygame.mixer.Sound("resources/rain.mp3")
+        
     def getFishes(self):
         return self.fish
         

@@ -3,6 +3,7 @@ import os
 
 import menu
 import fishing
+import driving
 
 def main():
     pygame.init()
@@ -16,10 +17,6 @@ def main():
     clock = pygame.time.Clock()
     speed = 15
 
-    #цвета
-    RED = (255, 0, 0)
-    GREEN = (0, 255, 0)
-    BLUE = (0, 0, 255)
     DarkPurple  = (15, 0, 50)
     LightYellow = (255, 255, 100)
 
@@ -43,7 +40,7 @@ def main():
                     if menu.play_button.btn.collidepoint(mouse_pos):
                         # вот тут логика нажатия
                         print("Button is working")
-                        state = "game"
+                        state = "fishing"
                 
                     if menu.quit_button.btn.collidepoint(mouse_pos):
                         isOpen = False
@@ -53,8 +50,14 @@ def main():
         if state == "menu":
             # рендер и вызов меню
             menu.menu(screen, LightYellow)
-        if state == "game":
+        if state == "fishing":
             fishing.fishing(screen, LightYellow)
+            if fishing.fishing_menu.getFishes() == 5:
+                state = "driving"
+        if state == "driving":
+            driving.driving(screen, LightYellow)
+            if driving.driving_menu.getPoints() == 240:
+                state = "menu"
 
         pygame.display.flip()
             
