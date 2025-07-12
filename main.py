@@ -52,7 +52,7 @@ def main():
             menu.menu(screen, LightYellow)
         if state == "fishing":
             fishing.fishing(screen, LightYellow)
-            if fishing.fishing_menu.getFishes() == 5:
+            if fishing.fishing_menu.getFishes() == 3:
                 state = "driving"
         if state == "driving":
             driving.driving(screen, LightYellow)
