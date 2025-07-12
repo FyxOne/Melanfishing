@@ -56,6 +56,9 @@ class Fishing:
         self.katushka = pygame.mixer.Sound("resources/katushka.mp3")
         self.katushka.set_volume(0.1)
         self.rain = pygame.mixer.Sound("resources/rain.mp3")
+
+        self.player_model = pygame.Rect(0, 0, 1280, 720)
+        self.player_texture = pygame.image.load('resources/fishing1.png')
         
     def getFishes(self):
         return self.fish
@@ -85,6 +88,7 @@ class Fishing:
 
                     if self.reaction < 1.5:
                         self.katushka.play(-1)
+                        self.player_texture = pygame.image.load('resources/fishing2.png')
                         if self.isKeyPressed == False:
                             self.isKeyPressed = True
                             self.lock = 1
@@ -135,6 +139,7 @@ class Fishing:
             self.points = 0
             self.fish += 1
             self.isFishing = False
+            self.player_texture = pygame.image.load('resources/fishing1.png')
             self.startstart_time = pygame.time.get_ticks()
             self.katushka.stop()
             self.klujet.play()
@@ -150,6 +155,9 @@ class Fishing:
             self.lock = 0
 
             self.text = self.font.render("My fishies: " + str(self.fish), True, (255, 255, 100))
+        
+        if self.points == 227:
+            self.player_texture = pygame.image.load('resources/fishing3.png')
 
         mouse_buttons = pygame.mouse.get_pressed()
         if self.isFishing:
@@ -163,6 +171,8 @@ class Fishing:
                 
                 if self.arrow.x < 40:
                     self.arrow_x = 150
+
+            #self.player_texture = pygame.image.load('resources/fishing2.png')
 
         self.zone.topleft = (self.posx, 55)
         self.arrow.topleft = (self.arrow_x, 50)
@@ -188,12 +198,14 @@ class Fishing:
     def force_draw(self, screen):
         screen.blit(self.text, (1280-200, 50))
 
+        screen.blit(self.player_texture, self.player_model)
+
         if self.lock == 0 and self.pizda == 1 and self.fuck_u <= 1.5:
             self.text2 = self.font.render(str(self.fuck_u), True, (255, 255, 100))
-            screen.blit(self.text2, (500, 300))
+            screen.blit(self.text2, (500, 100))
         if self.lock == 0 and self.pizda == 1 and self.fuck_u > 1.5:
             self.text2 = self.font.render(str(self.fuck_u), True, (255, 0, 0))
-            screen.blit(self.text2, (500, 300))
+            screen.blit(self.text2, (500, 100))
 
     # Возврат состояния рыбалки игрока
     def isFishing(self):
