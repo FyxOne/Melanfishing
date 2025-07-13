@@ -76,18 +76,12 @@ class Driving:
         self.car_model.topleft = (self.posx, 365)
         self.arrow.topleft = (self.arrow_x, 50) 
 
-        if self.points <= 240:
+        if self.points <= 241:
             if self.posx >= 280 and self.posx <= 500:
                 self.points += self.car_speed
             else:
                 if self.points >= 0:
                     self.points -= 5
-
-        if self.car_speed > 0:
-            self.car_sound.set_volume(self.car_speed)
-            self.car_sound.play(-1)
-        else:
-            self.car_sound.stop()
 
     def draw(self, screen, color):
         pygame.draw.line(screen, color, (480, 0), (320, 720), 2)
@@ -110,3 +104,9 @@ def driving(screen, color):
     driving_menu.draw(screen, color)
     driving_menu.random()
     driving_menu.update()
+
+    driving_menu.car_sound.set_volume(driving_menu.car_speed * 0.5)
+    driving_menu.car_sound.play(-1)
+
+    if driving_menu.points > 239:
+        driving_menu.car_sound.stop()

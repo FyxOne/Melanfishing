@@ -4,6 +4,7 @@ import os
 import menu
 import fishing
 import driving
+import cooking
 
 def main():
     pygame.init()
@@ -56,7 +57,11 @@ def main():
                 state = "driving"
         if state == "driving":
             driving.driving(screen, LightYellow)
-            if driving.driving_menu.getPoints() == 240:
+            if driving.driving_menu.getPoints() > 239:
+                state = "cooking"
+        if state == "cooking":
+            cooking.cooking(screen, LightYellow)
+            if cooking.cooking_menu.getPoints() > 239:
                 state = "menu"
 
         pygame.display.flip()
