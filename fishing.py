@@ -49,7 +49,6 @@ class Fishing:
         pygame.font.init()
         self.font = pygame.font.Font("resources/EpilepsySans.ttf", 30)
         self.text = self.font.render("My fishies: " + str(self.fish), True, (255, 255, 100))
-        self.text2 = self.font.render("FUCK MY FISH IS HERE!!!!", True, (255, 255, 255))
 
         pygame.mixer.init()
         self.klujet = pygame.mixer.Sound("resources/klujet.mp3")
@@ -86,7 +85,7 @@ class Fishing:
                     self.zone.topleft = (self.posx, 55)
                     self.arrow.topleft = (self.arrow_x, 50)
 
-                    if self.reaction < 1.5:
+                    if self.reaction < 1:
                         self.katushka.play(-1)
                         self.player_texture = pygame.image.load('resources/fishing2.png')
                         if self.isKeyPressed == False:
@@ -200,10 +199,10 @@ class Fishing:
 
         screen.blit(self.player_texture, self.player_model)
 
-        if self.lock == 0 and self.pizda == 1 and self.fuck_u <= 1.5:
+        if self.lock == 0 and self.pizda == 1 and self.fuck_u <= 1:
             self.text2 = self.font.render(str(self.fuck_u), True, (255, 255, 100))
             screen.blit(self.text2, (500, 100))
-        if self.lock == 0 and self.pizda == 1 and self.fuck_u > 1.5:
+        if self.lock == 0 and self.pizda == 1 and self.fuck_u > 1:
             self.text2 = self.font.render(str(self.fuck_u), True, (255, 0, 0))
             screen.blit(self.text2, (500, 100))
 

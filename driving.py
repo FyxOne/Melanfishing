@@ -78,7 +78,7 @@ class Driving:
 
         if self.points <= 241:
             if self.posx >= 280 and self.posx <= 500:
-                self.points += self.car_speed
+                self.points += self.car_speed * 0.5
             else:
                 if self.points >= 0:
                     self.points -= 5

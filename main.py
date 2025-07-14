@@ -5,12 +5,13 @@ import menu
 import fishing
 import driving
 import cooking
+import splashes
 
 def main():
     pygame.init()
     pygame.mixer.init()
     screen = pygame.display.set_mode((1280, 720))
-    pygame.display.set_caption("Melanfishing")
+    pygame.display.set_caption(f"Melanfishing | {splashes.splash}")
     icon = pygame.image.load("resources/logo.png")
     pygame.display.set_icon(icon)
     isOpen = True
