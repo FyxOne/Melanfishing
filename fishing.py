@@ -57,7 +57,11 @@ class Fishing:
         self.rain = pygame.mixer.Sound("resources/rain.mp3")
 
         self.player_model = pygame.Rect(0, 0, 1280, 720)
-        self.player_texture = pygame.image.load('resources/fishing1.png')
+        self.texture_fishing1 = pygame.image.load('resources/fishing1.png')
+        self.texture_fishing2 = pygame.image.load('resources/fishing2.png')
+        self.texture_fishing3 = pygame.image.load('resources/fishing3.png')
+
+        self.player_texture = self.texture_fishing1;
         
     def getFishes(self):
         return self.fish
@@ -87,7 +91,7 @@ class Fishing:
 
                     if self.reaction < 1:
                         self.katushka.play(-1)
-                        self.player_texture = pygame.image.load('resources/fishing2.png')
+                        self.player_texture = self.texture_fishing2
                         if self.isKeyPressed == False:
                             self.isKeyPressed = True
                             self.lock = 1
@@ -138,7 +142,7 @@ class Fishing:
             self.points = 0
             self.fish += 1
             self.isFishing = False
-            self.player_texture = pygame.image.load('resources/fishing1.png')
+            self.player_texture = self.texture_fishing1
             self.startstart_time = pygame.time.get_ticks()
             self.katushka.stop()
             self.klujet.play()
@@ -156,7 +160,7 @@ class Fishing:
             self.text = self.font.render("My fishies: " + str(self.fish), True, (255, 255, 100))
         
         if self.points == 227:
-            self.player_texture = pygame.image.load('resources/fishing3.png')
+            self.player_texture = self.texture_fishing3
 
         mouse_buttons = pygame.mouse.get_pressed()
         if self.isFishing:

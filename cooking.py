@@ -29,8 +29,6 @@ class Cooking:
 
     def getPoints(self):
         return self.points
-    
-
 
     def update(self):
         self.dt = self.clock.tick(60)

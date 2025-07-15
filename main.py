@@ -11,7 +11,8 @@ def main():
     pygame.init()
     pygame.mixer.init()
     screen = pygame.display.set_mode((1280, 720))
-    pygame.display.set_caption(f"Melanfishing | {splashes.splash}")
+    splash = splashes.generate_randrom_spalsh()
+    pygame.display.set_caption(f"Melanfishing | {splash}")
     icon = pygame.image.load("resources/logo.png")
     pygame.display.set_icon(icon)
     isOpen = True
@@ -26,8 +27,10 @@ def main():
 
     state = "menu"
 
+    debug = False
+
     while isOpen: 
-        pygame.time.Clock().tick(60)
+        clock.tick(60)
 
         mouse_pos = pygame.mouse.get_pos()
 
@@ -47,6 +50,16 @@ def main():
                     if menu.quit_button.btn.collidepoint(mouse_pos):
                         isOpen = False
 
+            if event.type == pygame.KEYDOWN:
+                keys = pygame.key.get_pressed()
+                if keys[pygame.K_d] and keys[pygame.K_LALT]:
+                    if debug != True:
+                        debug = True
+                    else:
+                        pygame.display.set_caption(f"Melanfishing | {splash}")
+                        debug = False
+                    
+
         screen.fill(DarkPurple)
 
         if state == "menu":
@@ -64,6 +77,9 @@ def main():
             cooking.cooking(screen, LightYellow)
             if cooking.cooking_menu.getPoints() > 239:
                 state = "menu"
+
+        if debug:
+            pygame.display.set_caption(f"Melanfishing | {splash} | DEBUG: {clock.get_fps()}")
 
         pygame.display.flip()
             
