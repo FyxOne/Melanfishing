@@ -8,7 +8,9 @@ splashes = [
     "Разраб дебил",
     "Also try Quadix3D",
     "Python is trash",
-    "Рыба нахуй!"
+    "Рыба нахуй!",
+    "Батон ис воркинг"
 ]
 
-splash = random.choice(splashes)
+def generate_randrom_spalsh():
+    return random.choice(splashes)
