@@ -2,14 +2,19 @@ import pygame
 import os
 
 import menu
-import fishing
-import driving
-import cooking
 import splashes
+import audio
+import control
+
+import fishing as fishing_mod
+import driving as driving_mod
+import cooking as cooking_mod
 
 def main():
     pygame.init()
     pygame.mixer.init()
+    audio.init()
+
     screen = pygame.display.set_mode((1280, 720))
     splash = splashes.generate_randrom_spalsh()
     pygame.display.set_caption(f"Melanfishing | {splash}")
@@ -17,72 +22,82 @@ def main():
     pygame.display.set_icon(icon)
     isOpen = True
 
-    clock = pygame.time.Clock()
-    speed = 15
+    fishing_menu = fishing_mod.Fishing()
+    driving_menu = driving_mod.Driving()
+    cooking_menu = cooking_mod.Cooking()
 
+    audio.play_music(volume=0.1)
+    controls = control.TouchControls(1280, 720)
+
+    clock = pygame.time.Clock()
     DarkPurple  = (15, 0, 50)
     LightYellow = (255, 255, 100)
 
-    x, y = 500, 500
-
     state = "menu"
-
     debug = False
 
-    while isOpen: 
+    while isOpen:
         clock.tick(60)
-
-        mouse_pos = pygame.mouse.get_pos()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 isOpen = False
-
-            # Если кнопка нажата
+            controls.process_event(event)
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if state == "menu":
-                    # Если мышь находится на play_button - тогда условие верно
-                    if menu.play_button.btn.collidepoint(mouse_pos):
-                        # вот тут логика нажатия
-                        print("Button is working")
+                    if menu.play_button.btn.collidepoint(event.pos):
                         state = "fishing"
-                
-                    if menu.quit_button.btn.collidepoint(mouse_pos):
+                    if menu.quit_button.btn.collidepoint(event.pos):
                         isOpen = False
-
             if event.type == pygame.KEYDOWN:
-                keys = pygame.key.get_pressed()
-                if keys[pygame.K_d] and keys[pygame.K_LALT]:
-                    if debug != True:
-                        debug = True
-                    else:
+                keys_hw = pygame.key.get_pressed()
+                if keys_hw[pygame.K_d] and keys_hw[pygame.K_LALT]:
+                    debug = not debug
+                    if not debug:
                         pygame.display.set_caption(f"Melanfishing | {splash}")
-                        debug = False
-                    
+
+        # combine input
+        keys_hw = pygame.key.get_pressed()
+        mouse_hw = pygame.mouse.get_pressed()
+        keys_touch = controls.get_keys()
+        mouse_touch = controls.get_mouse()
+        keys = [keys_hw[i] or keys_touch[i] for i in range(len(keys_hw))]
+        mouse_buttons = tuple(mouse_hw[i] or mouse_touch[i] for i in range(3))
 
         screen.fill(DarkPurple)
 
         if state == "menu":
-            # рендер и вызов меню
             menu.menu(screen, LightYellow)
-        if state == "fishing":
-            fishing.fishing(screen, LightYellow)
-            if fishing.fishing_menu.getFishes() == 3:
+        elif state == "fishing":
+            fishing_menu.keybinds(mouse_buttons)
+            fishing_menu.force_draw(screen)
+            if fishing_menu.isFishing:
+                fishing_menu.random()
+                fishing_menu.draw(screen, LightYellow)
+                fishing_menu.update(keys, mouse_buttons)
+            if fishing_menu.getFishes() == 3:
                 state = "driving"
-        if state == "driving":
-            driving.driving(screen, LightYellow)
-            if driving.driving_menu.getPoints() > 239:
+        elif state == "driving":
+            driving_menu.draw(screen, LightYellow)
+            driving_menu.random()
+            driving_menu.update(keys, mouse_buttons)
+            if driving_menu.getPoints() > 239:
                 state = "cooking"
-        if state == "cooking":
-            cooking.cooking(screen, LightYellow)
-            if cooking.cooking_menu.getPoints() > 239:
+        elif state == "cooking":
+            cooking_menu.draw(screen, LightYellow)
+            cooking_menu.update(keys, mouse_buttons)
+            if cooking_menu.getPoints() > 239:
+                cooking_menu.stop_audio()
                 state = "menu"
 
         if debug:
             pygame.display.set_caption(f"Melanfishing | {splash} | DEBUG: {clock.get_fps()}")
 
+        controls.draw(screen)
         pygame.display.flip()
-            
+
+    audio.stop_all()
+    pygame.quit()
 
 if __name__ == "__main__":
     main()

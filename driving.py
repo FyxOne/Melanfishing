@@ -1,5 +1,7 @@
+
 import pygame
 import random
+import audio
 
 class Driving:
     def __init__(self):
@@ -18,10 +20,30 @@ class Driving:
         self.arrow = pygame.Rect(self.arrow_x, 50, 5, 50)
 
         self.dt = 0
-
         self.points = 0
 
-        self.car_sound = pygame.mixer.Sound("resources/car_sound.mp3")
+        self.engine_loaded = False
+        self.engine_playing = False
+        try:
+            self.car_sound = pygame.mixer.Sound("resources/car_sound.mp3")
+            self.engine_loaded = True
+        except Exception as e:
+            print("[driving] audio load error:", e)
+            self.car_sound = None
+
+    def _ensure_engine(self):
+        if self.engine_loaded and not self.engine_playing:
+            ch = audio.channel(audio.ENGINE)
+            ch.play(self.car_sound, loops=-1)
+            ch.set_volume(0.0)  # start silent
+            self.engine_playing = True
+
+    def _update_engine_volume(self):
+        if not self.engine_playing:
+            return
+        ch = audio.channel(audio.ENGINE)
+        # Volume proportional to speed
+        ch.set_volume(max(0.0, min(1.0, self.car_speed * 0.5)))
 
     def getPoints(self):
         return self.points
@@ -43,10 +65,12 @@ class Driving:
                 if self.direction_speed > 0:
                     self.posx -= self.direction_speed * self.dt
 
-    def update(self):
+    def update(self, keys, mouse_buttons):
         self.dt = self.clock.tick(60)
 
-        keys = pygame.key.get_pressed()
+        self._ensure_engine()
+
+        keys = keys
         if keys[pygame.K_d]:
             if self.posx <= 780 and self.car_speed >= 0:
                 self.posx += self.car_speed * self.dt
@@ -72,7 +96,6 @@ class Driving:
             if self.arrow_x >= 985 and self.arrow_x <= 1220:
                 self.arrow_x = self.car_speed * 235 + 985
 
-
         self.car_model.topleft = (self.posx, 365)
         self.arrow.topleft = (self.arrow_x, 50) 
 
@@ -82,6 +105,8 @@ class Driving:
             else:
                 if self.points >= 0:
                     self.points -= 5
+
+        self._update_engine_volume()
 
     def draw(self, screen, color):
         pygame.draw.line(screen, color, (480, 0), (320, 720), 2)
@@ -98,15 +123,5 @@ class Driving:
 
         screen.blit(self.car_texture, self.car_model)
 
-driving_menu = Driving()
-
-def driving(screen, color):
-    driving_menu.draw(screen, color)
-    driving_menu.random()
-    driving_menu.update()
-
-    driving_menu.car_sound.set_volume(driving_menu.car_speed * 0.5)
-    driving_menu.car_sound.play(-1)
-
-    if driving_menu.points > 239:
-        driving_menu.car_sound.stop()
+    def stop_audio(self):
+        audio.channel(audio.ENGINE).stop()

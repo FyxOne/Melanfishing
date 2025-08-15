@@ -1,3 +1,4 @@
+
 import pygame
 
 """
@@ -26,32 +27,21 @@ class Button:
 
     # Смена позиции кнопки
     def setPosition(self, x, y):
-        # self - это обозначение, что объект принадлежит классу (и переменная тоже)
         self.posx = x
         self.posy = y
         self.btn.topleft = (x, y)
 
-    # Рисуем кнопку (рендер)
-    # В аргументах указываем окно (screen) и цвет (color)
     def draw(self, screen, color):
         pygame.draw.rect(screen, color, self.btn)
-        # тут текст ебанный
         text_rect = self.text.get_rect(center=self.btn.center)
         screen.blit(self.text, text_rect)
         
-    # Полуение фиругы кнопки. Возвращает pygame.Rect
-    # В основном для логики нажатия
     def getRect(self):
         return self.btn
     
-
-# Объект кнопки "играть"
-# X, Y, Ширина, Высота, Текст на кнопке
 play_button = Button(1280/2 - 250/2, 300, 250, 50, "Play")
 quit_button = Button(1280/2 - 250/2, 370, 250, 50, "Quit")
 
-# def menu(screen) по-сути
 def menu(screen, color):
-    # Рисуем эту кнопку
     play_button.draw(screen, color)
     quit_button.draw(screen, color)
