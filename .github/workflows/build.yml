@@ -1,0 +1,71 @@
+name: Build Game
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y python3-pip python3-setuptools python3-venv git zip unzip openjdk-17-jdk
+          pip install --upgrade pip
+          pip install buildozer
+      - name: Build APK
+        run: |
+          buildozer init
+          sed -i 's/^title = .*/title = Melanfishing/' buildozer.spec
+          sed -i 's/^package.name = .*/package.name = melanfishing/' buildozer.spec
+          sed -i 's/^package.domain = .*/package.domain = org.example/' buildozer.spec
+          sed -i 's|^source.dir = .*|source.dir = .|' buildozer.spec
+          sed -i 's|^requirements = .*|requirements = python3, pygame|' buildozer.spec
+          echo "source.include_exts = py,png,jpg,jpeg,mp3,ogg,wav,ttf,ico" >> buildozer.spec
+          echo "icon.filename = resources/icon.png" >> buildozer.spec
+          echo "orientation = landscape" >> buildozer.spec
+          echo "fullscreen = 1" >> buildozer.spec
+          buildozer -v android debug
+      - uses: actions/upload-artifact@v3
+        with:
+          name: melanfishing-apk
+          path: bin/*.apk
+
+  build-exe:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: pip install pyinstaller
+      - name: Build EXE
+        run: |
+          pyinstaller --onefile --noconsole ^
+            --icon=resources/icon.ico ^
+            --add-data "resources;resources" ^
+            --hidden-import=menu --hidden-import=fishing --hidden-import=driving --hidden-import=cooking ^
+            --hidden-import=control --hidden-import=audio --hidden-import=splashes main.py
+      - uses: actions/upload-artifact@v3
+        with:
+          name: melanfishing-exe
+          path: dist/*.exe
+
+  release:
+    runs-on: ubuntu-latest
+    needs: [build-apk, build-exe]
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          path: artifacts
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: "Melanfishing Build"
+          tag_name: "build-${{ github.run_number }}"
+          body: "Автоматическая сборка игры Melanfishing. Внутри — APK для Android и EXE для Windows."
+          files: artifacts/**/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
