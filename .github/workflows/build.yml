@@ -30,10 +30,11 @@ jobs:
           echo "orientation = landscape" >> buildozer.spec
           echo "fullscreen = 1" >> buildozer.spec
           buildozer -v android debug
-      - uses: actions/upload-artifact@v3
+          mv bin/*.apk melanfishing.apk
+      - uses: actions/upload-artifact@v4
         with:
           name: melanfishing-apk
-          path: bin/*.apk
+          path: melanfishing.apk
 
   build-exe:
     runs-on: windows-latest
@@ -48,16 +49,17 @@ jobs:
             --add-data "resources;resources" ^
             --hidden-import=menu --hidden-import=fishing --hidden-import=driving --hidden-import=cooking ^
             --hidden-import=control --hidden-import=audio --hidden-import=splashes main.py
-      - uses: actions/upload-artifact@v3
+          rename dist\main.exe melanfishing.exe
+      - uses: actions/upload-artifact@v4
         with:
           name: melanfishing-exe
-          path: dist/*.exe
+          path: melanfishing.exe
 
   release:
     runs-on: ubuntu-latest
     needs: [build-apk, build-exe]
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           path: artifacts
       - name: Create GitHub Release
