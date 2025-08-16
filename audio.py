@@ -1,5 +1,6 @@
 
 import pygame
+import utils
 
 # Channel indices
 MUSIC = 0       # global background music
@@ -26,7 +27,7 @@ def play_music(volume: float = 0.15):
     """Start quiet global background music looping forever."""
     init()
     try:
-        music = pygame.mixer.Sound("resources/under_rian.ogg")
+        music = pygame.mixer.Sound(utils.resource_path("resources/under_rian.ogg"))
     except Exception as e:
         print("[audio] Failed to load background music:", e)
         return

@@ -1,5 +1,6 @@
 
 import pygame
+import utils
 
 """
     USE GUIDE
@@ -22,7 +23,7 @@ class Button:
 
         # Текст и шрифт
         pygame.font.init()
-        self.font = pygame.font.Font("resources/EpilepsySans.ttf", 30)
+        self.font = pygame.font.Font(utils.resource_path("resources/EpilepsySans.ttf"), 30)
         self.text = self.font.render(text, True, (15, 0, 50))
 
     # Смена позиции кнопки

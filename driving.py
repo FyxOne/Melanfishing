@@ -2,6 +2,7 @@
 import pygame
 import random
 import audio
+import utils
 
 class Driving:
     def __init__(self):
@@ -16,7 +17,7 @@ class Driving:
         self.arrow_x = 985
 
         self.car_model = pygame.Rect(self.posx, 310, 500, 250)
-        self.car_texture = pygame.image.load('resources/car.png')
+        self.car_texture = pygame.image.load(utils.resource_path("resources/car.png"))
         self.arrow = pygame.Rect(self.arrow_x, 50, 5, 50)
 
         self.dt = 0
@@ -25,7 +26,7 @@ class Driving:
         self.engine_loaded = False
         self.engine_playing = False
         try:
-            self.car_sound = pygame.mixer.Sound("resources/car_sound.mp3")
+            self.car_sound = pygame.mixer.Sound(utils.resource_path("resources/car_sound.mp3"))
             self.engine_loaded = True
         except Exception as e:
             print("[driving] audio load error:", e)

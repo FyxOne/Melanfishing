@@ -9,7 +9,14 @@ import control
 import fishing as fishing_mod
 import driving as driving_mod
 import cooking as cooking_mod
+import utils
 
+import sys
+# Ensure working directory is next to the .exe (PyInstaller) or project folder (source)
+if getattr(sys, "frozen", False):
+    os.chdir(os.path.dirname(sys.executable))
+else:
+    os.chdir(os.path.dirname(__file__))
 def main():
     pygame.init()
     pygame.mixer.init()
@@ -18,7 +25,7 @@ def main():
     screen = pygame.display.set_mode((1280, 720))
     splash = splashes.generate_randrom_spalsh()
     pygame.display.set_caption(f"Melanfishing | {splash}")
-    icon = pygame.image.load("resources/logo.png")
+    icon = pygame.image.load(utils.resource_path("resources/logo.png"))
     pygame.display.set_icon(icon)
     isOpen = True
 

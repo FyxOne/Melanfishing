@@ -2,6 +2,7 @@
 import pygame
 import random
 import audio
+import utils
 
 class Cooking:
     def __init__(self):
@@ -18,22 +19,22 @@ class Cooking:
 
         self.arrow = pygame.Rect(self.arrow_x, 50, 5, 50)
         self.btn_model = pygame.Rect(self.btn_x, self.btn_y, 100, 100)
-        self.btn_texture = pygame.image.load('resources/add_fire.png')
+        self.btn_texture = pygame.image.load(utils.resource_path("resources/add_fire.png"))
         self.stir_btn = pygame.Rect(50, 150, 250, 50)
 
-        self.pan1 = pygame.image.load('resources/pan1.png')
-        self.pan2 = pygame.image.load('resources/pan2.png')
+        self.pan1 = pygame.image.load(utils.resource_path("resources/pan1.png"))
+        self.pan2 = pygame.image.load(utils.resource_path("resources/pan2.png"))
         self.pan_model = pygame.Rect(0, 0, 1280, 720)
         self.pan_texture = self.pan1
 
-        self.font = pygame.font.Font("resources/EpilepsySans.ttf", 30)
+        self.font = pygame.font.Font(utils.resource_path("resources/EpilepsySans.ttf"), 30)
         self.text = self.font.render("Stir", True, (15, 0, 50))
 
         # audio
         self._audio_started = False
         try:
-            self.frying_sound = pygame.mixer.Sound("resources/frying.mp3")
-            self.stir_sound = pygame.mixer.Sound("resources/stir.mp3")
+            self.frying_sound = pygame.mixer.Sound(utils.resource_path("resources/frying.mp3"))
+            self.stir_sound = pygame.mixer.Sound(utils.resource_path("resources/stir.mp3"))
         except Exception as e:
             print("[cooking] audio load error:", e)
             self.frying_sound = None
@@ -60,7 +61,7 @@ class Cooking:
 
         if self.btn_model.collidepoint(mouse_pos) and mouse_buttons[0]:
             if self.points < 240:
-                self.points += 5
+                self.points += 7
             self.btn_x = random.randint(310, 1180)
             self.btn_y = random.randint(0, 275)
             self.btn_model.topleft = (self.btn_x, self.btn_y)

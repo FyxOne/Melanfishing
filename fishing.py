@@ -2,6 +2,7 @@ import pygame
 import random
 import time
 import audio
+import utils
 
 class Fishing:
     def __init__(self): 
@@ -34,22 +35,22 @@ class Fishing:
         self.meow = 0
 
         pygame.font.init()
-        self.font = pygame.font.Font("resources/EpilepsySans.ttf", 30)
+        self.font = pygame.font.Font(utils.resource_path("resources/EpilepsySans.ttf"), 30)
         self.text = self.font.render("My fishies: " + str(self.fish), True, (255, 255, 100))
 
         try:
-            self.klujet = pygame.mixer.Sound("resources/klujet.mp3")
-            self.katushka = pygame.mixer.Sound("resources/katushka.mp3")
+            self.klujet = pygame.mixer.Sound(utils.resource_path("resources/klujet.mp3"))
+            self.katushka = pygame.mixer.Sound(utils.resource_path("resources/katushka.mp3"))
             self.katushka.set_volume(0.1)
-            self.rain = pygame.mixer.Sound("resources/rain.mp3")
+            self.rain = pygame.mixer.Sound(utils.resource_path("resources/rain.mp3"))
         except Exception as e:
             print("[fishing] audio load error:", e)
             self.klujet = self.katushka = self.rain = None
 
         self.player_model = pygame.Rect(0, 0, 1280, 720)
-        self.texture_fishing1 = pygame.image.load('resources/fishing1.png')
-        self.texture_fishing2 = pygame.image.load('resources/fishing2.png')
-        self.texture_fishing3 = pygame.image.load('resources/fishing3.png')
+        self.texture_fishing1 = pygame.image.load(utils.resource_path("resources/fishing1.png"))
+        self.texture_fishing2 = pygame.image.load(utils.resource_path("resources/fishing2.png"))
+        self.texture_fishing3 = pygame.image.load(utils.resource_path("resources/fishing3.png"))
         self.player_texture = self.texture_fishing1
         
     def getFishes(self):

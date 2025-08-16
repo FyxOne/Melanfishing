@@ -1,5 +1,6 @@
 import pygame
 import os
+import utils
 
 class TouchControls:
     def __init__(self, screen_width=1280, screen_height=720):
@@ -31,9 +32,15 @@ class TouchControls:
 
         # Загрузка текстур
         try:
-            self.tex_arrow = pygame.image.load(os.path.join("resources", "arrow_btn.png")).convert_alpha()
-            self.tex_a = pygame.image.load(os.path.join("resources", "a_btn.png")).convert_alpha()
-            self.tex_b = pygame.image.load(os.path.join("resources", "b_btn.png")).convert_alpha()
+            self.tex_arrow = pygame.image.load(
+                utils.resource_path(os.path.join("resources", "arrow_btn.png"))
+            ).convert_alpha()
+            self.tex_a = pygame.image.load(
+                utils.resource_path(os.path.join("resources", "a_btn.png"))
+            ).convert_alpha()
+            self.tex_b = pygame.image.load(
+                utils.resource_path(os.path.join("resources", "b_btn.png"))
+            ).convert_alpha()
         except Exception as e:
             print("[control] Ошибка загрузки текстур кнопок:", e)
             self.tex_arrow = self.tex_a = self.tex_b = None
