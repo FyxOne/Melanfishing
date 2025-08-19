@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Melanfishing</title>
+  <link rel="icon" type="image/x-icon" href="resources/logo.png">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #0f0032;
+      height: 100%;
+      overflow: hidden;
+    }
+    #wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+    canvas {
+      background: #0f0032;
+      height: 100vh;        /* масштаб под высоту */
+      width: auto;
+      aspect-ratio: 16/9;   /* фикс пропорций */
+      max-width: 100%;
+      box-shadow: 0 10px 30px rgba(0,0,0,.4);
+    }
+    @font-face {
+      font-family: 'EpilepsySans';
+      src: url('resources/EpilepsySans.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+    #hint {
+      position: fixed;
+      left: 12px;
+      bottom: 12px;
+      color: #fff;
+      font-family: EpilepsySans, system-ui, sans-serif;
+      opacity: .7;
+    }
+    .corner-buttons {
+      position: fixed;
+      right: 12px;
+      bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .corner-buttons button, .corner-buttons a {
+      width: 48px;
+      height: 48px;
+      border: none;
+      border-radius: 8px;
+      background-color: rgba(255,255,255,0.15);
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 70%;
+      cursor: pointer;
+      text-decoration: none;
+      display: block;
+    }
+    .corner-buttons button:hover, .corner-buttons a:hover {
+      background-color: rgba(255,255,255,0.3);
+    }
+    /* сюда поставь свои нарисованные иконки */
+    .fullscreen-btn {
+      background-image: url("resources/fullscreen.png");
+    }
+    .github-btn {
+      background-image: url("resources/github.png");
+    }
+  </style>
+</head>
+<body>
+  <div id="wrap">
+    <canvas id="game" width="1280" height="720"></canvas>
+  </div>
+
+  <!-- Кнопки -->
+  <div class="corner-buttons">
+    <button id="fullscreen-btn" class="fullscreen-btn" title="Fullscreen"></button>
+    <a id="github-btn" class="github-btn" href="https://github.com/FyxOne/Melanfishing" target="_blank" title="GitHub"></a>
+  </div>
+
+  <script src="game.js"></script>
+  <script>
+    // Полноэкранный режим
+    document.getElementById('fullscreen-btn').addEventListener('click', () => {
+      const canvas = document.getElementById('game');
+      if (canvas.requestFullscreen) {
+        canvas.requestFullscreen();
+      }
+      if (screen.orientation && screen.orientation.lock) {
+        screen.orientation.lock('landscape').catch(()=>{});
+      }
+    });
+  </script>
+</body>
+</html>
